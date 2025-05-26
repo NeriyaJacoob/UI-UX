@@ -1,0 +1,3 @@
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: /home/korban/Desktop/TestEncrypt
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: /home/korban/Desktop/TestEncrypt
+[SYSTEM] ⚠️ בוצע פיענוח לכל הקבצים בתיקייה: /home/korban/Desktop/TestEncrypt
