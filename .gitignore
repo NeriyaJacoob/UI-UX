@@ -13,3 +13,4 @@ frontend/build/
 .vscode/
 *.log
 .DS_Store
+tmp/*

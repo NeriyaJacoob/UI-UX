@@ -1,3 +1,22 @@
-[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: /home/korban/Desktop/TestEncrypt
-[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: /home/korban/Desktop/TestEncrypt
-[SYSTEM] ⚠️ בוצע פיענוח לכל הקבצים בתיקייה: /home/korban/Desktop/TestEncrypt
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[SUCCESS] 🟢 הסימולציה נחסמה על ידי אנטי וירוס (block_ransom זוהה)
+[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[SUCCESS] 🟢 הסימולציה נחסמה על ידי אנטי וירוס (block_ransom זוהה)

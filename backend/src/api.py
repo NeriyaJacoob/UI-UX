@@ -1,7 +1,9 @@
 import sys
 import os
 import subprocess
+import io
 
+from contextlib import redirect_stdout
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from modules.decrypt import decrypt_files
 from modules.utils import decrypt_key_rsa, log_summary
@@ -101,19 +103,6 @@ def test_ransom():
             "message": str(e)
         }), 500
 
-@app.route("/run-antivirus", methods=["POST"])
-def run_antivirus():
-    try:
-        data = request.get_json()
-        code = data.get("code", "")
-        temp_path = "/tmp/student_antivirus.py"
-        with open(temp_path, "w") as f:
-            f.write(code)
-
-        result = subprocess.run(["python3", temp_path], capture_output=True, text=True, timeout=3)
-        return jsonify({"result": result.stdout or "✔️ הופעל בהצלחה"})
-    except Exception as e:
-        return jsonify({"error": str(e)})
 
 @app.route("/infection", methods=["POST"])
 def run_infection():
@@ -123,9 +112,47 @@ def run_infection():
     except Exception as e:
         return jsonify({"error": str(e)})
 
+@app.route("/antivirus/code", methods=["GET"])
+def read_student_code():
+    path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+    default_code = '''with open("/tmp/block_ransom", "w") as f:
+    f.write("BLOCKED")
+
+    print("✅ אנטי וירוס הופעל בהצלחה!")'''
+    try:
+        if not os.path.exists(path) or os.path.getsize(path) == 0:
+            with open(path, "w") as f:
+                f.write(default_code)
+            return default_code
+
+        with open(path) as f:
+            return f.read()
+    except Exception as e:
+        return f"# שגיאה בטעינת הקובץ: {e}"
+
+@app.route("/run-antivirus", methods=["POST"])
+def run_antivirus():
+    try:
+        code_path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+        with open(code_path) as f:
+            code = f.read()
+
+        with open("/tmp/antivirus_exec.py", "w") as f:
+            f.write(code)
+
+        result = subprocess.run(
+            ["python3", "/tmp/antivirus_exec.py"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+        )
+
+        return jsonify({"result": result.stdout, "error": result.stderr})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/antivirus/clear", methods=["POST"])
 def clear_antivirus_block():
-    path = "/tmp/block_ransom"
+    path = "/tmp/block_ransom"  # מחק רק את סימן החסימה
     try:
         if os.path.exists(path):
             os.remove(path)
@@ -133,6 +160,16 @@ def clear_antivirus_block():
         return jsonify({"status": "ok", "message": "לא היה אנטי וירוס פעיל"})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/save-antivirus", methods=["POST"])
+def save_antivirus():
+    data = request.get_json()
+    code = data.get("code", "")
+    path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+    with open(path, "w") as f:
+        f.write(code)
+    return jsonify({"status": "ok"})
+
 
 @app.route("/summary/clear", methods=["POST"])
 def clear_summary_logs():
