@@ -14,7 +14,12 @@ import SimulationInfection from "./pages/SimulationInfection";
 import Quiz from "./components/Quiz"; // נשאר ב־components
 import TheoryStage from "./components/TheoryStage";
 import Home from "./pages/Home"; // אם בשימוש עדיין
-import "./styles/App.css";
+import './styles/index.css';
+import UserGuide from "./pages/UserGuide";
+
+      
+
+
 
 export default function App() {
   return (
@@ -35,6 +40,10 @@ export default function App() {
           <Route path="/simulation/encrypt" element={<SimulationEncrypt />} />
           <Route path="/simulation/ransom" element={<SimulationRansom />} />
           <Route path="/simulation/infection" element={<SimulationInfection />} />
+          <Route path="/guide" element={<UserGuide />} />
+          <Route path="/practice/quiz" element={<Quiz />} />
+          <Route path="/practice/test" element={<div>עמוד ניסוי (בקרוב)</div>} />
+
         </Route>
       </Routes>
     

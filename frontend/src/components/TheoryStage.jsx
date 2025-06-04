@@ -43,84 +43,99 @@ const TheoryStage = ({ stageIndex = 0 }) => {
   const navigate = useNavigate();
   const section = sections?.[stageIndex];
 
-  if (!section) return <div>שגיאה: שלב לא קיים</div>;
+  if (!section) return <div className="text-white p-10">שגיאה: שלב לא קיים</div>;
 
   const { title, description, risks } = section;
 
-
   return (
-  <div className="section">
-    <h2>{title}</h2>
-    <p>{description}</p>
-    <h3>סיכונים עיקריים:</h3>
-    <ul>
-      {risks.map((risk, i) => (
-        <li key={i}>{risk}</li>
-      ))}
-    </ul>
+    <div className="bg-blue-950 text-blue-100 min-h-screen px-10 py-12 rtl">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <h1 className="text-3xl font-bold text-blue-300">{title}</h1>
+        <p className="text-lg">{description}</p>
 
-    {/* ✨ תוכן חכם נוסף לשלב החדירה */}
-    {stageIndex === 0 && (
-      <div className="attack-methods">
-        <h3>🧠 שיטות חדירה נפוצות שכדאי לזהות:</h3>
-        <p>כדי לאתר חדירה בתחילתה, חשוב להכיר את הטכניקות הנפוצות:</p>
-        <ul>
-          <li><strong>פישינג באימייל:</strong> שליחת קובץ ZIP או DOC עם קוד זדוני</li>
-          <li><strong>RDP פתוח:</strong> פורטים פתוחים ללא אימות חזק</li>
-          <li><strong>ניצול פרצות (Exploits):</strong> שימוש ב־SMB, פרצות ישנות (EternalBlue)</li>
-          <li><strong>התחזות לעדכון:</strong> כמו NotPetya שזייף עדכון תוכנה</li>
-          <li><strong>מאקרו ב־Word:</strong> פתיחת מסמך שמפעיל סקריפט</li>
-          <li><strong>USB נגוע:</strong> הדבקה דרך התקנים פיזיים</li>
-        </ul>
-        <p className="hint">🔒 בשלב המעשי תצטרך לזהות ניסיונות כאלה ולחסום אותם.</p>
+        <div>
+          <h2 className="text-xl font-bold text-blue-200 mb-2">סיכונים עיקריים:</h2>
+          <ul className="list-disc pr-6 space-y-1">
+            {risks.map((risk, i) => (
+              <li key={i}>{risk}</li>
+            ))}
+          </ul>
+        </div>
+
+        {/* תוכן דינמי לכל שלב */}
+        {stageIndex === 0 && (
+          <ContentBox
+            title="🧠 שיטות חדירה נפוצות שכדאי לזהות"
+            tips={[
+              "פישינג באימייל: שליחת קובץ ZIP או DOC עם קוד זדוני",
+              "RDP פתוח: פורטים פתוחים ללא אימות חזק",
+              "ניצול פרצות (Exploits): שימוש ב־SMB, EternalBlue וכו׳",
+              "התחזות לעדכון: כמו NotPetya שזייף עדכון תוכנה",
+              "מאקרו ב־Word: פתיחת מסמך שמפעיל סקריפט",
+              "USB נגוע: הדבקה דרך התקנים פיזיים"
+            ]}
+            hint="🔒 בשלב המעשי תצטרך לזהות ניסיונות כאלה ולחסום אותם."
+          />
+        )}
+        {stageIndex === 1 && (
+          <ContentBox
+            title="🧬 איך כופרה שורדת במערכת"
+            tips={[
+              "✅ יצירת משימות מתוזמנות (Scheduled Tasks)",
+              "✅ הוספת קובץ ל־Startup או Registry",
+              "✅ התחזות לתהליכים לגיטימיים (svchost וכו׳)",
+              "✅ עקיפת אנטי וירוס באמצעות obfuscation",
+              "✅ שכפול לקבצים מוסתרים או מקומיים"
+            ]}
+            hint="🔒 תידרש לזהות תהליך חשוד או קובץ שמנסה להתמיד."
+          />
+        )}
+        {stageIndex === 2 && (
+          <ContentBox
+            title="🧨 שלב ההצפנה והפגיעה"
+            tips={[
+              "✅ סריקת תיקיות לפי סיומות נפוצות",
+              "✅ הצפנה באמצעות AES/RSA",
+              "✅ מחיקת קבצי גיבוי (`.bak`, Shadow Copies)",
+              "✅ עצירת שירותים חשובים (DB, אנטי וירוס)"
+            ]}
+            hint="🔒 ככל שתזהה מוקדם יותר, תוכל להציל יותר מידע."
+          />
+        )}
+        {stageIndex === 3 && (
+          <ContentBox
+            title="💸 דרישת כופר והפעלת לחץ"
+            tips={[
+              "✅ קובץ README בכל תיקייה",
+              "✅ מסך נעילה שמונע גישה",
+              "✅ תקשורת עם התוקף דרך Tor",
+              "✅ הדלפת מידע אם לא שולם"
+            ]}
+            hint="🔒 גם אם משלמים – אין הבטחה לשחזור. הגנה מראש היא המפתח."
+          />
+        )}
+
+        <button
+          onClick={() => navigate("/theory")}
+          className="mt-8 bg-blue-700 hover:bg-blue-600 text-white px-6 py-2 rounded"
+        >
+          ⬅️ חזרה לשלבים
+        </button>
       </div>
-    )}
-    {stageIndex === 1 && (
-  <div className="attack-methods">
-    <h3>🧬 איך כופרה שורדת במערכת:</h3>
-    <p>לאחר החדירה, התוקף מבצע מהלכים להעמקת הנוכחות:</p>
-    <ul>
-      <li>✅ יצירת משימות מתוזמנות (Scheduled Tasks) להרצה אוטומטית</li>
-      <li>✅ הוספת קובץ ל־Startup או Registry</li>
-      <li>✅ שכפול לקבצים תמימים או מוסתרים</li>
-      <li>✅ התחזות לתהליכים לגיטימיים (svchost, explorer)</li>
-      <li>✅ עקיפת אנטי-וירוס באמצעות obfuscation או packing</li>
-    </ul>
-    <p className="hint">🔒 בשלב המעשי תידרש לזהות תהליך חריג או קובץ שמנסה להתמיד — בדיוק כך נראית הדבקה.</p>
-  </div>
-)}
-{stageIndex === 2 && (
-  <div className="attack-methods">
-    <h3>🧨 שלב ההצפנה והפגיעה:</h3>
-    <p>בשלב זה הכופרה פועלת בפועל — לרוב בשקט:</p>
-    <ul>
-      <li>✅ סריקת תיקיות וקבצים לפי סיומות נפוצות</li>
-      <li>✅ הצפנת כל קובץ באמצעות AES או RSA (לפעמים גם ChaCha)</li>
-      <li>✅ מחיקת קבצי גיבוי (`.bak`, `shadow copies`, `restore points`)</li>
-      <li>✅ עצירת שירותים חשובים כמו מסדי נתונים, אנטי וירוס, או קבצי Office פתוחים</li>
-    </ul>
-    <p className="hint">🔒 ככל שתזהה את ההצפנה מהר יותר — כך תוכל למנוע אובדן מידע.</p>
-  </div>
-)}
-{stageIndex === 3 && (
-  <div className="attack-methods">
-    <h3>💸 הצגת הדרישה והשליטה בקורבן:</h3>
-    <p>בשלב הסופי, המטרה ברורה — להפעיל לחץ פסיכולוגי ולשלוט במידע:</p>
-    <ul>
-      <li>✅ יצירת קובץ README בכל תיקייה עם הוראות תשלום</li>
-      <li>✅ הצגת מסך נעילה (lockscreen) שמונע גישה רגילה למחשב</li>
-      <li>✅ שימוש ב־Tor או dark web ליצירת קשר עם התוקף</li>
-      <li>✅ במקרים מתקדמים: הדלפת מידע אם הקורבן לא משלם</li>
-    </ul>
-    <p className="hint">🔒 אל תסמוך על התוקף — גם אחרי תשלום אין הבטחה לשחזור. הפתרון הוא הגנה מראש.</p>
-  </div>
-)}
-
-
-    <button className="btn" onClick={() => navigate("/theory")}>⬅️ חזרה</button>
-  </div>
-);
+    </div>
+  );
 };
 
+const ContentBox = ({ title, tips = [], hint }) => (
+  <div className="bg-blue-800 p-4 rounded-lg shadow space-y-3">
+    <h3 className="text-xl font-semibold">{title}</h3>
+    <ul className="list-disc pr-6 space-y-1">
+      {tips.map((tip, i) => (
+        <li key={i}>{tip}</li>
+      ))}
+    </ul>
+    <p className="italic text-sm text-blue-200">{hint}</p>
+  </div>
+);
 
 export default TheoryStage;

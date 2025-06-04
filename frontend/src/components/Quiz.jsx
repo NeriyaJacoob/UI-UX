@@ -93,29 +93,51 @@ const Quiz = () => {
   const score = questions.filter(q => answers[q.id] === q.correct).length;
 
   return (
-    <div className="section text-right">
-      <h2 className="mb-4">🧠 מבדק קצר</h2>
+    <div className="bg-gray-900 text-white min-h-screen p-8 rtl">
+      <h1 className="text-3xl font-bold mb-6 text-yellow-400">🧠 מבדק ידע</h1>
+
       {questions.map(q => (
-        <div key={q.id} className="mb-6">
-          <p className="mb-2 font-bold">{q.question}</p>
-          {q.options.map((opt, idx) => (
-            <div
-              key={idx}
-              onClick={() => handleSelect(q.id, idx)}
-              className={`quiz-option ${answers[q.id] === idx ? 'selected' : ''}`}
-            >
-              - {opt}
-            </div>
-          ))}
+        <div key={q.id} className="mb-6 bg-gray-800 p-4 rounded-xl shadow">
+          <p className="font-semibold mb-2">{q.question}</p>
+          <div className="space-y-2">
+            {q.options.map((opt, idx) => {
+              const selected = answers[q.id] === idx;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => handleSelect(q.id, idx)}
+                  className={`cursor-pointer px-4 py-2 rounded transition border ${
+                    selected
+                      ? 'bg-yellow-500 text-black border-yellow-400'
+                      : 'hover:bg-gray-700 border-gray-600'
+                  }`}
+                >
+                  {opt}
+                </div>
+              );
+            })}
+          </div>
         </div>
       ))}
 
       {!submitted ? (
-        <button className="btn" onClick={() => setSubmitted(true)}>📊 סיים ובדוק</button>
+        <button
+          onClick={() => setSubmitted(true)}
+          className="bg-green-600 hover:bg-green-700 px-6 py-3 mt-4 rounded text-white font-bold"
+        >
+          📊 סיים ובדוק
+        </button>
       ) : (
-        <div>
-          <p className="mt-4">✅ {score} מתוך {questions.length} תשובות נכונות</p>
-          <button className="btn mt-2" onClick={() => navigate("/")}>⬅️ חזרה לתפריט</button>
+        <div className="mt-6">
+          <p className="text-xl font-semibold mb-4">
+            ✅ ענית נכונה על {score} מתוך {questions.length}
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded text-white font-bold"
+          >
+            ⬅️ חזרה לתפריט הראשי
+          </button>
         </div>
       )}
     </div>
