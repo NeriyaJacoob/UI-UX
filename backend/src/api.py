@@ -31,7 +31,7 @@ def encrypt_endpoint():
 @app.route("/decrypt", methods=["POST"])
 def decrypt_simulation():
     try:
-        folder = os.path.expanduser("~/Desktop/TestEncrypt")
+        folder = os.path.join(BASE_DIR, "tmp", "TestEncrypt")
         decrypt_files(folder=folder)
         return jsonify({"status": "ok", "message": "🔓 הקבצים פוענחו בהצלחה"})
     except Exception as e:

