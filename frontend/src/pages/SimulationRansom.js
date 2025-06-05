@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./styles/SimulationRansom.css";
 
 
 const SimulationRansom = () => {
@@ -27,7 +28,7 @@ const SimulationRansom = () => {
       <button className="btn" onClick={triggerRansom}>▶️ הפעל דרישה</button>
       <br /><br />
       <Link to="/simulation">
-        <button className="btn" style={{ marginTop: "30px" }}>⬅️ חזרה לסימולציות</button>
+        <button className="btn returnBtn">⬅️ חזרה לסימולציות</button>
       </Link>
     </div>
   );

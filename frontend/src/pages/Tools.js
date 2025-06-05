@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import "./styles/Tools.css";
 
 const Tools = () => {
   const [key, setKey] = useState('');
@@ -31,8 +32,8 @@ const Tools = () => {
           ⬅️ חזרה לתוכן הראשי
         </button>
       {key && (
-        <div style={{ marginTop: "20px" }}>
-          <p style={{ wordBreak: "break-all", color: "#66ffcc" }}>{key}</p>
+        <div className="keyContainer">
+          <p className="keyText">{key}</p>
           <button className="btn" onClick={copyToClipboard}>📋 העתק</button>
         </div>
       )}
