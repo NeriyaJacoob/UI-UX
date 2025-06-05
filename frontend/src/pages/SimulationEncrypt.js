@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import "./styles/SimulationEncrypt.css";
 
 
 const SimulationEncrypt = () => {
@@ -63,13 +64,13 @@ const SimulationEncrypt = () => {
   fetch("http://127.0.0.1:5000/decrypt", { method: "POST" })
     .then(res => res.json())
     .then(data => alert(data.message))
-    .catch(() => alert("❌ שגיאה בפיענוח הקבצים"));
+    .catch(() => alert("❌ שגיאה בפענוח הקבצים"));
 }}>
 🔓 פענח קבצים
 </button>
 <br /><br />
       <Link to="/simulation">
-        <button className="btn" style={{ marginTop: "30px" }}>⬅️ חזרה לסימולציות</button>
+        <button className="btn returnBtn">⬅️ חזרה לסימולציות</button>
       </Link>
     </div>
   );

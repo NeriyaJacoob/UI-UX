@@ -30,6 +30,6 @@ def decrypt_files(folder: str = "./target"):
                 with open(path, "wb") as f:
                     f.write(header + tail)
 
-                log_summary(f"בוצע פיענוח לכל הקבצים בתיקייה: {folder}", "system")
+                log_summary(f"בוצע פענוח לכל הקבצים בתיקייה: {folder}", "system")
             except Exception as e:
-                log_action(f"שגיאה בפיענוח {path}: {str(e)}")
+                log_action(f"שגיאה בפענוח {path}: {str(e)}")

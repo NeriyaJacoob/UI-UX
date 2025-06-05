@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./styles/Simulation.css";
 
 const Simulation = () => {
   const navigate = useNavigate();
@@ -7,11 +8,11 @@ const Simulation = () => {
   return (
     <div className="section">
       <h2>💣 סימולציות תקיפה</h2>
-      <p style={{ marginBottom: "20px" }}>
+      <p className="marginBottom20">
         בחר סימולציה כדי לצפות בדוגמה ולהתמודד עם המשימה:
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "15px" }}>
+      <div className="buttonsContainer">
         <button className="btn" onClick={() => navigate("/simulation/encrypt")}>
           🛡️ הצפנת קבצים
         </button>

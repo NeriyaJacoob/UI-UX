@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { Link } from 'react-router-dom';
+import "./styles/Summary.css";
 
 const Summary = () => {
   const [logs, setLogs] = useState("טוען...");
@@ -18,14 +19,14 @@ const Summary = () => {
   return (
     <div className="section">
       <h2>📊 סיכום וסטטיסטיקות שימוש</h2>
-<div style={{ background: "#1a1a1a", padding: "20px", borderRadius: "8px", textAlign: "left", direction: "ltr" }}>
+<div className="logsBox">
     {logs.split('\n').filter(Boolean).map((line, i) => {
     let color = "#ccc"; // ברירת מחדל
     if (line.startsWith("[SUCCESS]")) color = "lightgreen";
     else if (line.startsWith("[FAIL]")) color = "salmon";
     else if (line.startsWith("[SYSTEM]")) color = "gold";
 
-    return <p key={i} style={{ color, margin: 0 }}>{line}</p>;
+    return <p key={i} className="logLine" style={{ color }}>{line}</p>;
   })}
 </div>
 

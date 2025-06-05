@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./IDE.css";
 
 export default function IDE() {
   const [code, setCode] = useState("");
@@ -32,19 +33,16 @@ export default function IDE() {
 
 
   return (
-    <div style={{ display: "flex", height: "500px", border: "1px solid #555", borderRadius: "10px", overflow: "hidden" }}>
+    <div className="ideContainer">
       <textarea
-  value={code}
-  onChange={e => setCode(e.target.value)}  // הוסף זאת
-  style={{
-    width: "50%", background: "#1e1e1e", color: "#d4d4d4", fontFamily: "monospace",
-    padding: "15px", fontSize: "16px", border: "none", outline: "none"
-  }}
-/>
+        value={code}
+        onChange={e => setCode(e.target.value)}
+        className="ideTextarea"
+      />
 
-      <div style={{ width: "50%", background: "#000", color: "#00ff88", padding: "15px", fontFamily: "monospace", fontSize: "16px" }}>
-        <div style={{ marginBottom: "10px", color: "#fff" }}>
-          <button onClick={runCode} style={{ background: "#28a745", padding: "10px 20px", border: "none", borderRadius: "5px", cursor: "pointer" }}>
+      <div className="ideOutput">
+        <div className="ideRun">
+          <button onClick={runCode} className="ideRunButton">
             ▶️ הרץ אנטי וירוס
           </button>
         </div>
