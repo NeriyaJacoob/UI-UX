@@ -4,7 +4,9 @@ import subprocess
 import io
 
 from contextlib import redirect_stdout
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(BASE_DIR)
 from modules.decrypt import decrypt_files
 from modules.utils import decrypt_key_rsa, log_summary
 from modules.encrypt import encrypt_files
@@ -33,7 +35,7 @@ def decrypt_simulation():
         decrypt_files(folder=folder)
         return jsonify({"status": "ok", "message": "🔓 הקבצים פוענחו בהצלחה"})
     except Exception as e:
-        return jsonify({"status": "fail", "message": f"שגיאה בפיענוח: {str(e)}"})
+        return jsonify({"status": "fail", "message": f"שגיאה בפענוח: {str(e)}"})
 
 @app.route("/content/theory", methods=["GET"])
 def get_theory_text():
@@ -107,14 +109,15 @@ def test_ransom():
 @app.route("/infection", methods=["POST"])
 def run_infection():
     try:
-        subprocess.Popen(["python3", "/home/korban/ByteMeProject/backend/src/modules/infector.py"])
+        script = os.path.join(BASE_DIR, "modules", "infector.py")
+        subprocess.Popen(["python3", script])
         return jsonify({"status": "✅ הדבקה הופעלה"})
     except Exception as e:
         return jsonify({"error": str(e)})
 
 @app.route("/antivirus/code", methods=["GET"])
 def read_student_code():
-    path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+    path = os.path.join(BASE_DIR, "tmp", "student_antivirus.py")
     default_code = '''with open("/tmp/block_ransom", "w") as f:
     f.write("BLOCKED")
 
@@ -133,7 +136,7 @@ def read_student_code():
 @app.route("/run-antivirus", methods=["POST"])
 def run_antivirus():
     try:
-        code_path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+        code_path = os.path.join(BASE_DIR, "tmp", "student_antivirus.py")
         with open(code_path) as f:
             code = f.read()
 
@@ -165,7 +168,7 @@ def clear_antivirus_block():
 def save_antivirus():
     data = request.get_json()
     code = data.get("code", "")
-    path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+    path = os.path.join(BASE_DIR, "tmp", "student_antivirus.py")
     with open(path, "w") as f:
         f.write(code)
     return jsonify({"status": "ok"})

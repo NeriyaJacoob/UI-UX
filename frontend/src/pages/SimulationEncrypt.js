@@ -63,7 +63,7 @@ const SimulationEncrypt = () => {
   fetch("http://127.0.0.1:5000/decrypt", { method: "POST" })
     .then(res => res.json())
     .then(data => alert(data.message))
-    .catch(() => alert("❌ שגיאה בפיענוח הקבצים"));
+    .catch(() => alert("❌ שגיאה בפענוח הקבצים"));
 }}>
 🔓 פענח קבצים
 </button>
