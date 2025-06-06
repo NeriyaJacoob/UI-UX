@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./IDE.css";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "";
+
 export default function IDE() {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/antivirus/code")  // חדש
+    fetch(`${API_BASE}/antivirus/code`)  // חדש
       .then(res => res.text())
       .then(text => setCode(text));
   }, []);
@@ -14,14 +16,14 @@ export default function IDE() {
  const runCode = async () => {
   try {
     // שלב 1: שמור את הקוד הנוכחי
-    await fetch("http://127.0.0.1:5000/save-antivirus", {
+    await fetch(`${API_BASE}/save-antivirus`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code })
     });
 
     // שלב 2: הרץ את הקובץ
-    const res = await fetch("http://127.0.0.1:5000/run-antivirus", {
+    const res = await fetch(`${API_BASE}/run-antivirus`, {
       method: "POST",
     });
     const data = await res.json();

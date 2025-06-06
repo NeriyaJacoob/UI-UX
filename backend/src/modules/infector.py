@@ -8,13 +8,18 @@ from modules.utils import log_summary
 
 
 INFECTION_MARKER = "#infected"
+TRIGGER_SCRIPT_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "simulation", "trigger_ransom.py")
+)
 INJECTION_CODE = (
     f"{INFECTION_MARKER}\n"
     "import os\n"
-    "os.system('python3 /home/korban/ByteMeProject/backend/src/modules/simulation/trigger_ransom.py')\n"
+    f"os.system('python3 {TRIGGER_SCRIPT_PATH}')\n"
 )
 
-TARGET_DIR = "/home/korban/Desktop/TestInfected"
+TARGET_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "tmp", "TestInfected")
+)
 TARGET_EXTENSIONS = ['.py', '.sh']
 DETECTION_LOG = "/tmp/detection_result.txt"
 
@@ -69,7 +74,9 @@ def scan_and_infect(directory):
                 infect_file(filepath)
 
 def run_student_antivirus():
-    path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+    path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "tmp", "student_antivirus.py")
+    )
     subprocess.run(["python3", path])
 
 if __name__ == "__main__":

@@ -210,7 +210,7 @@ def run_antivirus():
             f.write(code)
 
         # שלב 3: הרץ עם Python מתוך ה־venv
-        venv_python = "/home/korban/ByteMeProject/backend/venv/bin/python"
+        venv_python = os.path.join(os.path.dirname(BASE_DIR), "venv", "bin", "python")
 
         result = subprocess.run(
             [venv_python, exec_path],

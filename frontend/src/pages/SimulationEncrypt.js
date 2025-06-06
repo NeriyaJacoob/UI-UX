@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import "./styles/SimulationEncrypt.css";
 import MatrixBackground from "../components/MatrixBackground";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "";
+
 const SimulationEncrypt = () => {
   const [folder, setFolder] = useState("");
 
   const encrypt = async () => {
     if (!folder) return alert("📁 נא למלא נתיב");
     try {
-      const res = await fetch("http://127.0.0.1:5000/encrypt", {
+      const res = await fetch(`${API_BASE}/encrypt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ folder })
@@ -58,7 +60,7 @@ const SimulationEncrypt = () => {
         <button
           className="btn bg-green-700 hover:bg-green-800 text-white mt-4"
           onClick={() => {
-            fetch("http://127.0.0.1:5000/decrypt", { method: "POST" })
+            fetch(`${API_BASE}/decrypt`, { method: "POST" })
               .then(res => res.json())
               .then(data => alert(data.message))
               .catch(() => alert("❌ שגיאה בפענוח הקבצים"));
