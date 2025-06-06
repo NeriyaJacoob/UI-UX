@@ -164,13 +164,14 @@ def test_ransom():
             "message": str(e)
         }), 500
 
-
 @app.route("/infection", methods=["POST"])
 def run_infection():
     try:
         script = os.path.join(BASE_DIR, "modules", "infector.py")
-        subprocess.Popen(["python3", script])
-        return jsonify({"status": "✅ הדבקה הופעלה"})
+        result = subprocess.run(["python3", script], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print("[STDOUT]", result.stdout)
+        print("[STDERR]", result.stderr)
+        return jsonify({"status": "✅ הדבקה הופעלה", "output": result.stdout, "error": result.stderr})
     except Exception as e:
         return jsonify({"error": str(e)})
 
@@ -195,22 +196,44 @@ def read_student_code():
 @app.route("/run-antivirus", methods=["POST"])
 def run_antivirus():
     try:
+        from modules.utils import log_summary  # ייבוא כאן כדי למנוע שגיאות בתחילת טעינה
+
         code_path = os.path.join(BASE_DIR, "tmp", "student_antivirus.py")
+        exec_path = "/tmp/antivirus_exec.py"
+
+        # שלב 1: טען את הקוד של התלמיד
         with open(code_path) as f:
             code = f.read()
 
-        with open("/tmp/antivirus_exec.py", "w") as f:
+        # שלב 2: כתוב לקובץ זמני
+        with open(exec_path, "w") as f:
             f.write(code)
 
+        # שלב 3: הרץ עם Python מתוך ה־venv
+        venv_python = "/home/korban/ByteMeProject/backend/venv/bin/python"
+
         result = subprocess.run(
-            ["python3", "/tmp/antivirus_exec.py"],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            [venv_python, exec_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
         )
 
-        return jsonify({"result": result.stdout, "error": result.stderr})
+
+        stdout = result.stdout.strip()
+        stderr = result.stderr.strip()
+
+        # שלב 4: אם יש שגיאה → כתוב ללוג
+        if stderr:
+            log_summary(f"שגיאה בהרצת אנטי וירוס:\n{stderr}", "system")
+
+        return jsonify({
+            "result": stdout,
+            "error": stderr
+        })
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 @app.route("/antivirus/clear", methods=["POST"])
 def clear_antivirus_block():

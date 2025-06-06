@@ -1,5 +1,2 @@
-[SYSTEM] ⚠️ התחלת סימולציה חדשה
-[SUCCESS] 🟢 הסימולציה נחסמה על ידי אנטי וירוס (block_ransom זוהה)
-[SYSTEM] ⚠️ התחלת סימולציה חדשה
-[FAIL] 🔴 הכופר הצפין את הקבצים בתיקייה: 
-[SYSTEM] ⚠️ התחלת סימולציה חדשה
+[SYSTEM] ⚠️ סימולציית הדבקה הופעלה
+[FAIL] 🔴 לא זוהתה הדבקה בזמן

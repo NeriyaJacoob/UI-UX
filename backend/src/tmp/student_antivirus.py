@@ -1,4 +1,3 @@
-with open("/tmp/block_ransom", "w") as f:
-    f.write("BLOCKED")
-
-    print("✅ אנטי וירוס הופעל בהצלחה!")
+print("✏️ כותב לקובץ זיהוי...")
+with open("/tmp/detection_result.txt", "w") as f:
+    f.write("trigger_ransom.py זוהה")

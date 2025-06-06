@@ -222,3 +222,6 @@ header {
 .home-page .sidebar {
   @apply bg-red-800 border-red-600;
 }
+iframe {
+  background-color: transparent !important;
+}

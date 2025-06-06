@@ -6805,6 +6805,7 @@ def check_antivirus_block():
 
 def rebuild_project():
     log_summary("התחלת סימולציה חדשה", "system")
+    open("/tmp/detection_result.txt", "w").close()
 
     main_path = os.path.join(SRC_PATH, "byte_me", "main.py")
 

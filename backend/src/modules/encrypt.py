@@ -11,6 +11,8 @@ SIGNATURE = b"BME1"
 CHUNK_SIZE = 10 * 1024
 
 def encrypt_files(folder: str = "./target"):
+    open("/tmp/detection_result.txt", "w").close()
+
     for root, _, files in os.walk(folder):
         for name in files:
             path = os.path.join(root, name)

