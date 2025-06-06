@@ -26,7 +26,8 @@ export default function PracticeExercise() {
   const [studentCode, setStudentCode] = useState('');
   const [output, setOutput] = useState('');
   const [showToolbox, setShowToolbox] = useState(false);
-  const [simulationStatus, setSimulationStatus] = useState(null);
+  const [detected, setDetected] = useState(null);
+  const [blocked, setBlocked] = useState(null);
   const [currentTask, setCurrentTask] = useState('infection');
 
   const currentTaskData = TASKS.find(task => task.id === currentTask);
@@ -34,19 +35,14 @@ export default function PracticeExercise() {
   const submitCode = async () => {
     try {
       await axios.post(`${API_BASE}/save-antivirus`, { code: studentCode });
-      const res = await axios.post(`${API_BASE}/run-antivirus`);
-      const result = res.data.result || res.data.error || 'אין פלט';
-      setOutput(result);
-      const success = result.includes('הצפנה נבלמה') || result.includes('BLOCKED');
-      setSimulationStatus(success ? '✔️ הצלחה' : '❌ כישלון');
-
-      await axios.post(`${API_BASE}/update-statistics`, {
-        type: currentTask,
-        success
-      });
+      const res = await axios.post(`${API_BASE}/simulate`, { task: currentTask });
+      setOutput(res.data.stdout || res.data.stderr || '');
+      setDetected(res.data.detected);
+      setBlocked(res.data.blocked);
     } catch {
       setOutput('❌ שגיאה בהרצה');
-      setSimulationStatus('❌');
+      setDetected(null);
+      setBlocked(null);
     }
   };
 
@@ -70,7 +66,8 @@ export default function PracticeExercise() {
             onClick={() => {
               setCurrentTask(task.id);
               setOutput('');
-              setSimulationStatus(null);
+              setDetected(null);
+              setBlocked(null);
             }}
             className={`px-4 py-2 rounded shadow text-white ${currentTask === task.id ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}
           >
@@ -116,7 +113,14 @@ export default function PracticeExercise() {
           <pre className="bg-black p-4 rounded overflow-auto max-h-60 text-green-300 text-sm whitespace-pre-wrap">
             {output}
           </pre>
-          <p className="text-xl">{simulationStatus}</p>
+          {detected !== null && (
+            <div className="space-y-1 text-xl">
+              <p>{detected ? '✅ זיהוי הצליח' : '❌ זיהוי נכשל'}</p>
+              {detected && (
+                <p>{blocked ? '🔒 חסימה הצליחה' : '🔓 חסימה נכשלה'}</p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

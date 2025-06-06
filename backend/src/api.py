@@ -12,6 +12,7 @@ from modules.decrypt import decrypt_files
 from modules.utils import decrypt_key_rsa, log_summary
 from modules.encrypt import encrypt_files
 from modules.decrypt import decrypt_files
+from modules.sim_flow import run_simulation
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -266,6 +267,17 @@ def clear_summary_logs():
     try:
         open(path, "w").close()
         return jsonify({"status": "ok"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/simulate", methods=["POST"])
+def simulate_task():
+    """Run a simulation with detection and blocking flow."""
+    task = request.json.get("task")
+    try:
+        result = run_simulation(task)
+        return jsonify(result)
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 

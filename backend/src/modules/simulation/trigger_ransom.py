@@ -3,9 +3,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 from modules.utils import log_summary
 
 # נתיבים
-PROJECT_ROOT = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "ByteMeProject11")
-)
+PROJECT_ROOT = os.path.join("/tmp", "byte_me_project")
 BYTE_ME_DIR = os.path.join(PROJECT_ROOT, "ByteMe")  # כאן נבנה הפרויקט
 SRC_PATH = os.path.join(BYTE_ME_DIR, "src")
 
