@@ -1,0 +1,4 @@
+[SYSTEM] ⚠️ סימולציית הדבקה הופעלה
+[FAIL] 🔴 לא זוהתה הדבקה בזמן
+[SYSTEM] ⚠️ סימולציית הדבקה הופעלה
+[FAIL] 🔴 לא זוהתה הדבקה בזמן
