@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
+
 const Quiz = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
@@ -125,7 +127,7 @@ const Quiz = () => {
           onClick={() => {
   setSubmitted(true);
 
-  fetch("http://127.0.0.1:5000/progress/quiz", {
+  fetch(`${API_BASE}/progress/quiz`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

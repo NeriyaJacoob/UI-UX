@@ -2,6 +2,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
+
 const content = [
   { title: "מהי תוכנת כופר?", text: "תוכנת כופר (Ransomware) היא סוג של תוכנה זדונית שמצפינה את הקבצים במחשב הקורבן ודורשת תשלום (בדרך כלל במטבעות קריפטוגרפיים) לשחרורם.", icon: "🔐" },
   { title: "שלב החדירה", text: "הכופרה נכנסת למחשב באמצעות מיילים מזויפים, קבצים נגועים או ניצול פרצות אבטחה.", icon: "📥" },
@@ -35,7 +37,7 @@ useEffect(() => {
     sessionStorage.setItem("visitedTheoryPages", JSON.stringify(updated));
 
     // עדכן שרת
-    fetch("http://127.0.0.1:5000/progress/theory", {
+    fetch(`${API_BASE}/progress/theory`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ page: index + 1 })

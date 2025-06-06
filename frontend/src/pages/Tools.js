@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import "./styles/Tools.css";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
+
 const Tools = () => {
   const [key, setKey] = useState('');
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ const Tools = () => {
 
   const generateKey = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:5000/generate-key");
+      const res = await fetch(`${API_BASE}/generate-key`);
       const data = await res.json();
       setKey(data.key);
     } catch {

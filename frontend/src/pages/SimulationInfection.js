@@ -2,14 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import MatrixBackground from "../components/MatrixBackground";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
+
 const SimulationInfection = () => {
   const triggerInfection = async () => {
   try {
     // שלב 1: הרצת האנטי וירוס
-    await fetch("http://127.0.0.1:5000/run-antivirus", { method: "POST" });
+    await fetch(`${API_BASE}/run-antivirus`, { method: "POST" });
 
     // שלב 2: הרצת סימולציית הדבקה
-    const res = await fetch("http://127.0.0.1:5000/infection", { method: "POST" });
+    const res = await fetch(`${API_BASE}/infection`, { method: "POST" });
     const data = await res.json();
 
     alert(data.status || data.error);

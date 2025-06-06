@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
+
 const TASKS = [
   {
     id: 'infection',
@@ -31,14 +33,14 @@ export default function PracticeExercise() {
 
   const submitCode = async () => {
     try {
-      await axios.post('http://127.0.0.1:5000/save-antivirus', { code: studentCode });
-      const res = await axios.post('http://127.0.0.1:5000/run-antivirus');
+      await axios.post(`${API_BASE}/save-antivirus`, { code: studentCode });
+      const res = await axios.post(`${API_BASE}/run-antivirus`);
       const result = res.data.result || res.data.error || 'אין פלט';
       setOutput(result);
       const success = result.includes('הצפנה נבלמה') || result.includes('BLOCKED');
       setSimulationStatus(success ? '✔️ הצלחה' : '❌ כישלון');
 
-      await axios.post('http://127.0.0.1:5000/update-statistics', {
+      await axios.post(`${API_BASE}/update-statistics`, {
         type: currentTask,
         success
       });

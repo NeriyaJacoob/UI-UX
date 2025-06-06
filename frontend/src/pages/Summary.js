@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./styles/Summary.css";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
+
 const Summary = () => {
   const [logs, setLogs] = useState("טוען...");
   
@@ -13,7 +15,7 @@ const Summary = () => {
 });
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/summary/logs")
+    fetch(`${API_BASE}/summary/logs`)
       .then((res) => res.json())
       .then((data) => {
         setLogs(data.logs);
@@ -23,7 +25,7 @@ const Summary = () => {
   }, []);
 
   const clearLogs = () => {
-    fetch("http://127.0.0.1:5000/summary/clear", { method: "POST" })
+    fetch(`${API_BASE}/summary/clear`, { method: "POST" })
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "ok") {

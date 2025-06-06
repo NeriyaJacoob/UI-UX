@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./styles/SimulationRansom.css";
+
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
 import MatrixBackground from "../components/MatrixBackground";
 
 const SimulationRansom = () => {
   const triggerRansom = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:5000/test-ransom", { method: "POST" });
+      const res = await fetch(`${API_BASE}/test-ransom`, { method: "POST" });
       const data = await res.json();
       alert(data.status || data.error);
     } catch {
