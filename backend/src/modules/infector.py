@@ -73,21 +73,13 @@ def scan_and_infect(directory):
                 filepath = os.path.join(root, filename)
                 infect_file(filepath)
 
-def run_student_antivirus():
-    path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "tmp", "student_antivirus.py")
-    )
-    subprocess.run(["python3", path])
-
 if __name__ == "__main__":
     log_summary("סימולציית הדבקה הופעלה", "system")
 
     print("[*] שלב 1: ניקוי קובץ זיהוי")
     clear_detection_log()
 
-    print("[*] שלב 2: הרצת אנטי וירוס של התלמיד")
-    run_student_antivirus()
-    time.sleep(1)
+
 
     print("[*] שלב 3: הדבקה והרצה בפועל")
     scan_and_infect(TARGET_DIR)
