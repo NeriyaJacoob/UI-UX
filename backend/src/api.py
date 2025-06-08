@@ -198,12 +198,10 @@ def read_student_code():
 
 @app.route("/run-antivirus", methods=["POST"])
 def run_antivirus():
-    print("📦 מריץ אנטי־וירוס מתוך:", code_path)
-
     try:
 
         code_path = os.path.abspath(os.path.join(BASE_DIR, "..", "tmp", "student_antivirus.py"))
-        print("📦 מריץ אנטי־וירוס מתוך:", code_path)  # ⬅️ עכשיו זה במקום הנכון
+        print("📦 מריץ אנטי־וירוס מתוך:", code_path)
 
         exec_path = "/tmp/antivirus_exec.py"
 
