@@ -48,7 +48,21 @@ export default function PracticeExercise() {
 
   const currentTaskData = TASKS.find(task => task.id === currentTask);
 
-  const submitCode = async () => {
+  const runAntivirus = async () => {
+    try {
+      await axios.post(`${API_BASE}/save-antivirus`, { code: studentCode });
+      const res = await axios.post(`${API_BASE}/run-antivirus`);
+      setOutput(res.data.result || res.data.error || '');
+      setDetected(null);
+      setBlocked(null);
+    } catch {
+      setOutput('❌ שגיאה בהרצה');
+      setDetected(null);
+      setBlocked(null);
+    }
+  };
+
+  const runSimulation = async () => {
     try {
       await axios.post(`${API_BASE}/save-antivirus`, { code: studentCode });
       const res = await axios.post(`${API_BASE}/simulate`, { task: currentTask });
@@ -122,12 +136,20 @@ export default function PracticeExercise() {
         />
 
 
-      <button
-        onClick={submitCode}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-lg shadow"
-      >
-        ▶️ הרץ אנטי וירוס
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={runAntivirus}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-lg shadow"
+        >
+          ▶️ הרץ אנטי וירוס
+        </button>
+        <button
+          onClick={runSimulation}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded text-lg shadow"
+        >
+          ▶️ הפעל סימולציה
+        </button>
+      </div>
 
       {output && (
         <div className="bg-slate-900 rounded p-4 space-y-3">
