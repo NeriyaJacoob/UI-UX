@@ -1,9 +1,11 @@
 import psutil
 import time
 import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+from modules.constants import DETECTION_FILE
 
 TRIGGER_NAME = "trigger_ransom.py"
-DETECTION_FILE = "/tmp/detection_result.txt"
 
 # תן זמן לתהליך הנגוע לעלות
 time.sleep(0.5)

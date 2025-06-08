@@ -6800,12 +6800,14 @@ ACF0RVh0SlBFRy1TYW1wbGluZy1mYWN0b3JzADJ4MiwxeDEsMXgx5VHbuAAAAABJRU5ErkJggg=="""
         "logs": {}
 }
 
+from modules.constants import DETECTION_FILE, BLOCK_FLAG
+
 def check_antivirus_block():
-    return os.path.exists("/tmp/block_ransom")
+    return os.path.exists(BLOCK_FLAG)
 
 def rebuild_project():
     log_summary("התחלת סימולציה חדשה", "system")
-    open("/tmp/detection_result.txt", "w").close()
+    open(DETECTION_FILE, "w").close()
 
     main_path = os.path.join(SRC_PATH, "byte_me", "main.py")
 
