@@ -13,6 +13,7 @@ from modules.utils import decrypt_key_rsa, log_summary
 from modules.encrypt import encrypt_files
 from modules.decrypt import decrypt_files
 from modules.sim_flow import run_simulation
+from modules.constants import BLOCK_FLAG
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -179,8 +180,8 @@ def run_infection():
 
 @app.route("/antivirus/code", methods=["GET"])
 def read_student_code():
-    path = os.path.join(BASE_DIR, "tmp", "student_antivirus.py")
-    default_code = '''with open("/tmp/block_ransom", "w") as f:
+    path = os.path.abspath(os.path.join(BASE_DIR, "..", "tmp", "student_antivirus.py"))
+    default_code = f'''with open("{BLOCK_FLAG}", "w") as f:
     f.write("BLOCKED")
 
     print("✅ אנטי וירוס הופעל בהצלחה!")'''
@@ -197,13 +198,10 @@ def read_student_code():
 
 @app.route("/run-antivirus", methods=["POST"])
 def run_antivirus():
-    print("📦 מריץ אנטי־וירוס מתוך:", code_path)
-
     try:
-        from modules.utils import log_summary  # ייבוא כאן כדי למנוע שגיאות בתחילת טעינה
 
         code_path = os.path.abspath(os.path.join(BASE_DIR, "..", "tmp", "student_antivirus.py"))
-        print("📦 מריץ אנטי־וירוס מתוך:", code_path)  # ⬅️ עכשיו זה במקום הנכון
+        print("📦 מריץ אנטי־וירוס מתוך:", code_path)
 
         exec_path = "/tmp/antivirus_exec.py"
 
@@ -246,7 +244,7 @@ def run_antivirus():
 
 @app.route("/antivirus/clear", methods=["POST"])
 def clear_antivirus_block():
-    path = "/tmp/block_ransom"  # מחק רק את סימן החסימה
+    path = BLOCK_FLAG  # מחק רק את סימן החסימה
     try:
         if os.path.exists(path):
             os.remove(path)
@@ -293,5 +291,5 @@ def simulate():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5000, debug=False)
 

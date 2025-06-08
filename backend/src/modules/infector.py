@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from modules.utils import log_summary
+from modules.constants import DETECTION_FILE
 
 
 INFECTION_MARKER = "#infected"
@@ -18,10 +19,9 @@ INJECTION_CODE = (
 )
 
 TARGET_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "tmp", "TestInfected")
+    os.path.join(os.path.dirname(__file__), "..", "..", "tmp", "TestInfected")
 )
 TARGET_EXTENSIONS = ['.py', '.sh']
-DETECTION_LOG = "/tmp/detection_result.txt"
 
 
 def is_infected(content):
@@ -29,13 +29,13 @@ def is_infected(content):
 
 def clear_detection_log():
     try:
-        open(DETECTION_LOG, "w").close()
+        open(DETECTION_FILE, "w").close()
     except:
         pass
 
 def was_detected():
     try:
-        with open(DETECTION_LOG) as f:
+        with open(DETECTION_FILE) as f:
             return bool(f.read().strip())
     except:
         return False
@@ -75,7 +75,7 @@ def scan_and_infect(directory):
 
 def run_student_antivirus():
     path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "tmp", "student_antivirus.py")
+        os.path.join(os.path.dirname(__file__), "..", "..", "tmp", "student_antivirus.py")
     )
     subprocess.run(["python3", path])
 

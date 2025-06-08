@@ -1,9 +1,13 @@
 import psutil
 import time
 import os
+import sys
+
+# אפשר לייבא את מודולי הפרויקט
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+from modules.constants import DETECTION_FILE, BLOCK_FLAG
 
 TRIGGER_NAME = "trigger_ransom.py"
-DETECTION_FILE = "/tmp/detection_result.txt"
 
 # תן זמן לתהליך הנגוע לעלות
 time.sleep(0.5)
@@ -28,6 +32,10 @@ for proc in psutil.process_iter(['pid', 'ppid', 'name', 'cmdline']):
                     f"הורה: {parent_cmd}\n"
                 )
                 f.flush()
+
+            # צור דגל חסימה כדי לדמות פעולת אנטי וירוס
+            with open(BLOCK_FLAG, "w") as block:
+                block.write("BLOCKED")
 
             print("✅ זיהוי: trigger_ransom.py הופעל מתוך תהליך נגוע")
             break

@@ -3,9 +3,7 @@ import subprocess
 import sys
 
 from modules.utils import log_summary
-
-DETECTION_FILE = "/tmp/detection_result.txt"
-BLOCK_FLAG = "/tmp/block_ransom"
+from modules.constants import DETECTION_FILE, BLOCK_FLAG
 
 MODULE_DIR = os.path.dirname(__file__)
 
@@ -16,7 +14,9 @@ SIMULATION_SCRIPTS = {
 
 
 def run_student_antivirus():
-    path = os.path.abspath(os.path.join(MODULE_DIR, "..", "tmp", "student_antivirus.py"))
+    path = os.path.abspath(
+        os.path.join(MODULE_DIR, "..", "..", "tmp", "student_antivirus.py")
+    )
 
     print("🧪 אנטי־וירוס: מחפש קובץ בנתיב:", path)
 
