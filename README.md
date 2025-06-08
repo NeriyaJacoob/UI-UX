@@ -47,3 +47,14 @@ Alternatively run `./setup_env.sh` to install everything automatically.
    ```
 2. In another terminal, start the React frontend as shown above.
 
+## Sample Data
+The repository includes a `backend/target` folder used by the encryption
+simulation and example antivirus scripts. A few dummy files are stored there
+so you can easily test the encryption and decryption flows. Infected sample
+files for the infection scenario reside under `backend/tmp/TestInfected`.
+
+## Antivirus Helpers
+Use `modules.tools.kill_process(pid)` in your antivirus script to terminate
+malicious simulations. The function also writes the `/tmp/block_ransom` flag so
+the backend recognizes that the process was blocked.
+

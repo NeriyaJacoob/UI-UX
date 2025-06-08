@@ -183,10 +183,10 @@ def run_infection():
 @app.route("/antivirus/code", methods=["GET"])
 def read_student_code():
     path = os.path.abspath(os.path.join(BASE_DIR, "..", "tmp", "student_antivirus.py"))
-    default_code = f'''with open("{BLOCK_FLAG}", "w") as f:
-    f.write("BLOCKED")
+    default_code = f'''from modules.tools import kill_process
 
-    print("✅ אנטי וירוס הופעל בהצלחה!")'''
+# דוגמה לשימוש: kill_process(1234)
+print("✅ אנטי וירוס הופעל בהצלחה!")'''
     try:
         if not os.path.exists(path) or os.path.getsize(path) == 0:
             with open(path, "w") as f:

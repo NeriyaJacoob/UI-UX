@@ -3,13 +3,14 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from modules.utils import log_action
 from modules.utils import log_summary
+from modules.constants import TARGET_FOLDER
 
 # חייב להיות אותו מפתח קבוע
 KEY = bytes.fromhex("3031323334353637383961626364656630313233343536373839616263646566")
 SIGNATURE = b"BME1"
 CHUNK_SIZE = 10 * 1024
 
-def decrypt_files(folder: str = "./target"):
+def decrypt_files(folder: str = TARGET_FOLDER):
     for root, _, files in os.walk(folder):
         for name in files:
             path = os.path.join(root, name)
