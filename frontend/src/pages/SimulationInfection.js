@@ -6,19 +6,16 @@ const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
 
 const SimulationInfection = () => {
   const triggerInfection = async () => {
-  try {
-    // שלב 1: הרצת האנטי וירוס
-    await fetch(`${API_BASE}/run-antivirus`, { method: "POST" });
+    try {
+      // אנטי וירוס כבר רץ ברקע, נריץ רק את הסימולציה
+      const res = await fetch(`${API_BASE}/infection`, { method: "POST" });
+      const data = await res.json();
 
-    // שלב 2: הרצת סימולציית הדבקה
-    const res = await fetch(`${API_BASE}/infection`, { method: "POST" });
-    const data = await res.json();
-
-    alert(data.status || data.error);
-  } catch {
-    alert("❌ שגיאה בהרצת הדבקה");
-  }
-};
+      alert(data.status || data.error);
+    } catch {
+      alert("❌ שגיאה בהרצת הדבקה");
+    }
+  };
 
 
   return (

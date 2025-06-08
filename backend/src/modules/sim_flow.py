@@ -12,30 +12,15 @@ SIMULATION_SCRIPTS = {
     "ransom": os.path.join(MODULE_DIR, "simulation", "trigger_ransom.py"),
 }
 
-
-def run_student_antivirus():
-    path = os.path.abspath(
-        os.path.join(MODULE_DIR, "..", "..", "tmp", "student_antivirus.py")
-    )
-
-    print("🧪 אנטי־וירוס: מחפש קובץ בנתיב:", path)
-
-    if not os.path.exists(path):
-        print("❌ קובץ student_antivirus.py לא נמצא!")
-        return  # או: raise FileNotFoundError
-
-    subprocess.run([sys.executable, path])
-
-
-
 def run_simulation(task: str):
     """Run a simulation with detection+blocking logic."""
-    # Clear detection file
+    # Clear detection file from previous runs
     if os.path.exists(DETECTION_FILE):
         os.remove(DETECTION_FILE)
 
-    # Run student AV before the simulation
-    run_student_antivirus()
+    log_summary(f"[SYSTEM] סימולציית {task} הופעלה", "system")
+
+
 
     stdout = ""
     stderr = ""
@@ -62,17 +47,22 @@ def run_simulation(task: str):
 
     detected = os.path.exists(DETECTION_FILE) and os.path.getsize(DETECTION_FILE) > 0
     if detected:
-        log_summary(f"{task} זוהה", "success")
+        log_summary(f"[OK] זיהוי הצליח בסימולציית {task}", "success")
     else:
-        log_summary(f"{task} לא זוהה", "fail")
+        log_summary(f"[FAIL] לא זוהתה הדבקה בזמן בסימולציית {task}", "fail")
 
     blocked = False
     if detected:
-        if os.path.exists(BLOCK_FLAG) or ret == 2:
+        if os.path.exists(BLOCK_FLAG):
             blocked = True
-            log_summary(f"{task} נחסם", "success")
+            log_summary("[BLOCK] נחסם באמצעות /tmp/block_ransom", "success")
+        elif ret == 2:
+            blocked = True
+            log_summary("[BLOCK] הסקריפט חזר עם קוד 2 – זוהתה חסימה", "success")
         else:
-            log_summary(f"{task} לא נחסם", "fail")
+            log_summary("[FAIL] תהליך סימולציה לא נחסם בפועל", "fail")
+    else:
+        log_summary("לא בוצעה חסימה מאחר והאיום לא זוהה", "system")
 
     return {
         "detected": detected,
