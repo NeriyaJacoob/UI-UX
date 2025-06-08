@@ -8,18 +8,34 @@ const TASKS = [
   {
     id: 'infection',
     label: '🧬 חסימת הדבקה',
-    description: 'הווירוס מזריק קוד לקבצי Python או Bash בתיקיית המטרה. מטרתך לזהות תהליך שמנסה להפעיל trigger_ransom.py מתוך קובץ אחר ולהגיב בהתאם.'
+    description:
+      'הווירוס מזריק קוד לקבצי Python או Bash בתיקיית המטרה. מטרתך לזהות תהליך שמנסה להפעיל trigger_ransom.py מתוך קובץ אחר ולהגיב בהתאם.',
+    tools: [
+      'הקובץ trigger_ransom.py ממוקם ב־/tmp/data',
+      'האנטי וירוס שלך רץ ברקע כל הזמן',
+      'זיהוי מוצלח כותב BLOCKED לקובץ /tmp/block_ransom'
+    ]
   },
   {
     id: 'encrypt',
     label: '🔐 מניעת הצפנה',
-    description: 'הכופרה מצפינה את תחילת הקובץ (10KB) עם מפתח AES. מטרתך למנוע את פעולת ההצפנה לפני שמתרחש שינוי בפועל לקובץ.'
+    description:
+      'הכופרה מצפינה את תחילת הקובץ (10KB) עם מפתח AES. מטרתך למנוע את פעולת ההצפנה לפני שמתרחש שינוי בפועל לקובץ.',
+    tools: [
+      'הצפנה מתבצעת גם היא על קבצים ב־/tmp/data',
+      'אם זיהית ניסיון הצפנה – עצור את התהליך וכתוב קובץ חסימה'
+    ]
   },
   {
     id: 'decrypt',
     label: '🗝️ פענוח קבצים',
-    description: 'יש קבצים שהוצפנו מראש. המשימה שלך היא לזהות אותם לפי חתימה (`BME1`) ולבצע את תהליך הפענוח בעזרת מפתח ידוע מראש.'
-  },
+    description:
+      'יש קבצים שהוצפנו מראש. המשימה שלך היא לזהות אותם לפי חתימה ("BME1") ולבצע את תהליך הפענוח בעזרת מפתח ידוע מראש.',
+    tools: [
+      'הקבצים המוצפנים מתחילים במחרוזת BME1',
+      'השתמש במפתח שסופק כדי לפענח ולהחזיר את הקובץ המקורי'
+    ]
+  }
 ];
 
 export default function PracticeExercise() {
@@ -32,7 +48,21 @@ export default function PracticeExercise() {
 
   const currentTaskData = TASKS.find(task => task.id === currentTask);
 
-  const submitCode = async () => {
+  const runAntivirus = async () => {
+    try {
+      await axios.post(`${API_BASE}/save-antivirus`, { code: studentCode });
+      const res = await axios.post(`${API_BASE}/run-antivirus`);
+      setOutput(res.data.result || res.data.error || '');
+      setDetected(null);
+      setBlocked(null);
+    } catch {
+      setOutput('❌ שגיאה בהרצה');
+      setDetected(null);
+      setBlocked(null);
+    }
+  };
+
+  const runSimulation = async () => {
     try {
       await axios.post(`${API_BASE}/save-antivirus`, { code: studentCode });
       const res = await axios.post(`${API_BASE}/simulate`, { task: currentTask });
@@ -82,11 +112,17 @@ export default function PracticeExercise() {
       </div>
 
       {showToolbox && (
-        <div className="bg-slate-800 rounded p-4 text-sm space-y-1">
-          <p>🔧 <b>trigger_ransom.py</b> מצפין קבצים בתיקיית <code>/tmp/data</code></p>
-          <p>🏃‍♂️ הוא רץ אחרי האנטי וירוס שלך.</p>
-          <p>🔍 הסימולציה בודקת אם חסמת אותו – לדוגמה ע"י יצירת הקובץ <code>/tmp/block_ransom</code></p>
-          <p>🧪 מותר להשתמש ב־<code>os</code>, <code>subprocess</code>, <code>open</code>, <code>remove</code>, <code>chmod</code></p>
+        <div className="bg-slate-800 rounded p-4 text-sm space-y-2">
+          <p className="font-bold">🧰 ארגז כלים</p>
+          <ul className="list-disc pr-5 space-y-1">
+            {currentTaskData.tools.map((tip, i) => (
+              <li key={i}>{tip}</li>
+            ))}
+          </ul>
+          <p>
+            🧪 ניתן להשתמש ב־<code>os</code>, <code>subprocess</code>,
+            <code>open</code>, <code>remove</code>, <code>chmod</code>
+          </p>
         </div>
       )}
 
@@ -100,12 +136,20 @@ export default function PracticeExercise() {
         />
 
 
-      <button
-        onClick={submitCode}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-lg shadow"
-      >
-        ▶️ הרץ אנטי וירוס
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={runAntivirus}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-lg shadow"
+        >
+          ▶️ הרץ אנטי וירוס
+        </button>
+        <button
+          onClick={runSimulation}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded text-lg shadow"
+        >
+          ▶️ הפעל סימולציה
+        </button>
+      </div>
 
       {output && (
         <div className="bg-slate-900 rounded p-4 space-y-3">

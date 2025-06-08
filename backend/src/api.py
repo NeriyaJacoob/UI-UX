@@ -14,6 +14,7 @@ from modules.encrypt import encrypt_files
 from modules.decrypt import decrypt_files
 from modules.sim_flow import run_simulation
 from modules.constants import BLOCK_FLAG
+from modules.av_runner import start as start_av
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -21,6 +22,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 CORS(app)
+start_av()
 
 @app.route("/progress/quiz", methods=["POST"])
 def update_quiz_score():
@@ -199,6 +201,7 @@ def read_student_code():
 @app.route("/run-antivirus", methods=["POST"])
 def run_antivirus():
     try:
+        log_summary("[INFO] אנטי־וירוס הופעל ע\"י המשתמש", "system")
 
         code_path = os.path.abspath(os.path.join(BASE_DIR, "..", "tmp", "student_antivirus.py"))
         print("📦 מריץ אנטי־וירוס מתוך:", code_path)

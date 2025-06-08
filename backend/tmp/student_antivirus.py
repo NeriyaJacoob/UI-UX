@@ -12,6 +12,8 @@ TRIGGER_NAME = "trigger_ransom.py"
 # תן זמן לתהליך הנגוע לעלות
 time.sleep(0.5)
 
+detected = False
+
 for proc in psutil.process_iter(['pid', 'ppid', 'name', 'cmdline']):
     try:
         cmdline = proc.info.get("cmdline", [])
@@ -23,7 +25,8 @@ for proc in psutil.process_iter(['pid', 'ppid', 'name', 'cmdline']):
             parent = psutil.Process(parent_pid)
             parent_cmd = " ".join(parent.cmdline())
 
-            # כתוב קובץ זיהוי עם מידע על התהליך והורהו
+            print(f"[DETECTED] נמצא תהליך עם סימן הדבקה: PID {proc.pid}")
+
             with open(DETECTION_FILE, "w") as f:
                 f.write(
                     f"זוהה תהליך הדבקה!\n"
@@ -33,12 +36,16 @@ for proc in psutil.process_iter(['pid', 'ppid', 'name', 'cmdline']):
                 )
                 f.flush()
 
-            # צור דגל חסימה כדי לדמות פעולת אנטי וירוס
+            print(f"[SUCCESS] נוצר {DETECTION_FILE}")
+
             with open(BLOCK_FLAG, "w") as block:
                 block.write("BLOCKED")
 
-            print("✅ זיהוי: trigger_ransom.py הופעל מתוך תהליך נגוע")
+            detected = True
             break
 
     except (psutil.NoSuchProcess, psutil.AccessDenied):
         continue
+
+if not detected:
+    print("[FAIL] אנטי־וירוס רץ אך לא כתב זיהוי")
