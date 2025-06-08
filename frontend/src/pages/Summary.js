@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import "./styles/Summary.css";
 
+const TASK_LABELS = {
+  infection: "🧬 חסימת הדבקה",
+  encrypt: "🔐 מניעת הצפנה",
+  decrypt: "🗝️ פענוח קבצים",
+};
+
 const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
 
 const Summary = () => {
@@ -11,7 +17,8 @@ const Summary = () => {
   quiz_score: 0,
   simulations_blocked: [],
   detection_accuracy: 0,
-  theory_progress_percent: 0
+  theory_progress_percent: 0,
+  task_results: {}
 });
 
   useEffect(() => {
@@ -61,6 +68,22 @@ const Summary = () => {
               <span>🎯 אחוז דיוק בזיהוי:</span>
               <span>{stats.detection_accuracy}%</span>
             </div>
+            {stats.task_results && (
+              <div className="summaryItem">
+                <span>📋 סטטוס משימות:</span>
+                <ul className="list-disc pr-5">
+                  {Object.entries(TASK_LABELS).map(([id, label]) => {
+                    const res = stats.task_results[id] || {};
+                    let txt = '⬜ לא בוצעה';
+                    if (res.detected && res.blocked) txt = '🟢 בוצעה בהצלחה';
+                    else if (res.detected && !res.blocked) txt = '🟡 זוהה, לא נחסם';
+                    return (
+                      <li key={id}>{label} - {txt}</li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
           </>
         )}
       </div>

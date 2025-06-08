@@ -1,5 +1,6 @@
 // עמוד תרגול מעשי - React עם ממשק מותאם אישית (רשימת משימות וחלונית הסבר)
 import { useState } from 'react';
+import Timeline from '../components/Timeline';
 import axios from 'axios';
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:5000";
@@ -44,9 +45,18 @@ export default function PracticeExercise() {
   const [showToolbox, setShowToolbox] = useState(false);
   const [detected, setDetected] = useState(null);
   const [blocked, setBlocked] = useState(null);
+  const [logs, setLogs] = useState([]);
+  const [taskStatus, setTaskStatus] = useState({});
   const [currentTask, setCurrentTask] = useState('infection');
 
   const currentTaskData = TASKS.find(task => task.id === currentTask);
+
+  const getStatusText = status => {
+    if (!status) return '⬜ לא בוצעה';
+    if (status.detected && status.blocked) return '🟢 בוצעה בהצלחה';
+    if (status.detected && !status.blocked) return '🟡 זוהה, לא נחסם';
+    return '⬜ לא בוצעה';
+  };
 
   const runAntivirus = async () => {
     try {
@@ -55,10 +65,12 @@ export default function PracticeExercise() {
       setOutput(res.data.result || res.data.error || '');
       setDetected(null);
       setBlocked(null);
+      setLogs([]);
     } catch {
       setOutput('❌ שגיאה בהרצה');
       setDetected(null);
       setBlocked(null);
+      setLogs([]);
     }
   };
 
@@ -69,10 +81,13 @@ export default function PracticeExercise() {
       setOutput(res.data.stdout || res.data.stderr || '');
       setDetected(res.data.detected);
       setBlocked(res.data.blocked);
+      setLogs(res.data.logs || []);
+      setTaskStatus(prev => ({ ...prev, [currentTask]: { detected: res.data.detected, blocked: res.data.blocked } }));
     } catch {
       setOutput('❌ שגיאה בהרצה');
       setDetected(null);
       setBlocked(null);
+      setLogs([]);
     }
   };
 
@@ -98,16 +113,20 @@ export default function PracticeExercise() {
               setOutput('');
               setDetected(null);
               setBlocked(null);
+              setLogs([]);
             }}
             className={`px-4 py-2 rounded shadow text-white ${currentTask === task.id ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}
           >
-            {task.label}
+            {task.label} ({getStatusText(taskStatus[task.id])})
           </button>
         ))}
       </div>
 
       {/* תיאור המשימה הנבחרת */}
-      <div className="bg-slate-800 rounded p-4 text-sm">
+      <div className="bg-slate-800 rounded p-4 text-sm space-y-2">
+        <h2 className="text-lg font-semibold">
+          {currentTaskData.label} ({getStatusText(taskStatus[currentTask])})
+        </h2>
         <p><span className="font-bold">🧠 משימה:</span> {currentTaskData.description}</p>
       </div>
 
@@ -141,13 +160,13 @@ export default function PracticeExercise() {
           onClick={runAntivirus}
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded text-lg shadow"
         >
-          ▶️ הרץ אנטי וירוס
+          🛡️ הפעל אנטי־וירוס בלבד
         </button>
         <button
           onClick={runSimulation}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded text-lg shadow"
         >
-          ▶️ הפעל סימולציה
+          🚀 הפעל סימולציה מלאה
         </button>
       </div>
 
@@ -158,11 +177,19 @@ export default function PracticeExercise() {
             {output}
           </pre>
           {detected !== null && (
-            <div className="space-y-1 text-xl">
-              <p>{detected ? '✅ זיהוי הצליח' : '❌ זיהוי נכשל'}</p>
+            <div className={`p-4 rounded space-y-1 text-xl ${detected && blocked ? 'bg-green-900' : 'bg-red-900'}`}> 
+              <p>{detected ? '✅ זיהוי התהליך הצליח!' : '❌ לא זוהה התהליך החשוד.'}</p>
               {detected && (
-                <p>{blocked ? '🔒 חסימה הצליחה' : '🔓 חסימה נכשלה'}</p>
+                <p>{blocked ? '🟢 התהליך הזדוני נחסם בהצלחה!' : '🔴 התהליך הזדוני לא נחסם!'}</p>
               )}
+            </div>
+          )}
+          {logs.length > 0 && (
+            <Timeline logs={logs} />
+          )}
+          {detected !== null && (!detected || (detected && !blocked)) && (
+            <div className="bg-yellow-900 p-2 rounded text-sm">
+              { !detected ? 'הטיפ שלנו: ודא שהאנטי־וירוס שלך סורק תהליכים בזמן אמת.' : 'הטיפ שלנו: צור קובץ חסימה (/tmp/block_ransom) מיד כשזיהית.'}
             </div>
           )}
         </div>
