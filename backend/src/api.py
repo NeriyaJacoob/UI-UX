@@ -14,7 +14,6 @@ from modules.encrypt import encrypt_files
 from modules.decrypt import decrypt_files
 from modules.sim_flow import run_simulation
 from modules.constants import BLOCK_FLAG
-from modules.av_runner import start as start_av
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -22,7 +21,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 CORS(app)
-start_av()
 
 @app.route("/progress/quiz", methods=["POST"])
 def update_quiz_score():

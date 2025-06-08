@@ -12,13 +12,30 @@ SIMULATION_SCRIPTS = {
     "ransom": os.path.join(MODULE_DIR, "simulation", "trigger_ransom.py"),
 }
 
+
+def run_student_antivirus():
+    path = os.path.abspath(
+        os.path.join(MODULE_DIR, "..", "..", "tmp", "student_antivirus.py")
+    )
+
+    print("🧪 אנטי־וירוס: מחפש קובץ בנתיב:", path)
+
+    if not os.path.exists(path):
+        print("❌ קובץ student_antivirus.py לא נמצא!")
+        return  # או: raise FileNotFoundError
+
+    subprocess.run([sys.executable, path])
+
+
+
 def run_simulation(task: str):
     """Run a simulation with detection+blocking logic."""
     # Clear detection file
     if os.path.exists(DETECTION_FILE):
         os.remove(DETECTION_FILE)
 
-
+    # Run student AV before the simulation
+    run_student_antivirus()
 
     stdout = ""
     stderr = ""
